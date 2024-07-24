@@ -1,0 +1,9 @@
+# 忽略 PyInstaller 生成的目录
+dist/
+build/
+
+# 忽略 PyInstaller 生成的 spec 文件
+*.spec
+
+# 如果使用了 --onefile 选项，可能还会生成一些临时文件夹
+*_cache/
