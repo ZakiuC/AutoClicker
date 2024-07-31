@@ -31,6 +31,9 @@ pip install pynput configparser
 - **位置定位**：用户可以通过按F8定位并保存目标位置，用于回城的位置锁定。
 - **可配置的按键时间和间隔**：用户可以通过F6和F7设置按键的持续时间和间隔。
 
+## 演示
+- **bilibili**: 【俄 洛 伊 飞 升 工 具】 https://www.bilibili.com/video/BV13BvDeCEMJ/?share_source=copy_web&vd_source=3e9698790668535c22ce6a0355bc09e7
+
 ## 风险和注意事项
 - 使用管理员权限运行脚本，可能导致潜在的安全风险。
 - 过度使用自动化工具可能会导致游戏崩溃或账户被封。
