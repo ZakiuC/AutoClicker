@@ -151,10 +151,7 @@ class AutoClicker:
                 print("停止")
                 break
 
-            # self.mouse.click(Button.left, 1)  # 每次循环点击一次鼠标左键
-            self.keyboard.press(" ")
-            time.sleep(self.config_manager.settings['press_time'] / 1000)
-            self.keyboard.release(" ")
+            self.mouse.click(Button.left, 1)  # 每次循环点击一次鼠标左键
 
             # 从迭代器获取按键，如果已经到达列表末尾，重置迭代器
             try:
