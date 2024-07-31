@@ -90,16 +90,14 @@ class AutoClicker:
         })
         self.mode = self.config_manager.settings.get('mode', 1)  # 从配置加载模式
         self.listener = None
-        self.thread_active = False
+        self.mouse_thread_active = False
+        self.keyboard_thread_active = False
         self.input_request = None
             
-    def perform_actions(self):
+    def perform_mouse_actions(self):
         if self.mode == 1:
             self.initial_position = self.mouse.position
 
-        # 初始化按键迭代器
-        keys = ['w', 's', 'a', 'd']
-        key_iterator = iter(keys)
 
         while self.running:
             if self.mode == 1 and self.mouse.position != self.initial_position:
@@ -108,7 +106,19 @@ class AutoClicker:
                 break
 
             self.mouse.click(Button.left, 1)  # 每次循环点击一次鼠标左键
+            time.sleep(self.config_manager.settings['interval_time'] / 1000)
 
+            if self.mode == 2:
+                self.mouse.position = (self.config_manager.settings['x'], self.config_manager.settings['y'])
+
+        self.mouse_thread_active = False  # 线程完成后，将标志设置为 False
+
+    def perform_keyboard_actions(self):
+        # 初始化按键迭代器
+        keys = ['w', 's', 'a', 'd']
+        key_iterator = iter(keys)
+
+        while self.running:
             # 从迭代器获取按键，如果已经到达列表末尾，重置迭代器
             try:
                 key = next(key_iterator)
@@ -121,21 +131,21 @@ class AutoClicker:
             self.keyboard.release(key)
             time.sleep(self.config_manager.settings['interval_time'] / 1000)
 
-            if self.mode == 2:
-                self.mouse.position = (self.config_manager.settings['x'], self.config_manager.settings['y'])
+        self.keyboard_thread_active = False  # 线程完成后，将标志设置为 False
 
-        self.thread_active = False  # 线程完成后，将标志设置为 False
 
 
         
     def toggle(self):
         if not self.running:
-            if not self.thread_active:  # 检查是否有线程活动
+            if not self.mouse_thread_active and not self.keyboard_thread_active:  # 检查是否有线程活动
                 self.running = True
                 self.locked_position = self.mouse.position
                 self.mouse.position = (self.config_manager.settings['x'], self.config_manager.settings['y'])
-                threading.Thread(target=self.perform_actions).start()
-                self.thread_active = True  # 启动线程时，将标志设置为 True
+                threading.Thread(target=self.perform_mouse_actions).start()
+                threading.Thread(target=self.perform_keyboard_actions).start()
+                self.mouse_thread_active = True  # 启动线程时，将标志设置为 True
+                self.keyboard_thread_active = True  # 启动线程时，将标志设置为 True
                 print("启动")
             else:
                 print("已有一个操作正在执行，请稍后再试。")
