@@ -92,30 +92,7 @@ class AutoClicker:
         self.listener = None
         self.thread_active = False
         self.input_request = None
-
-    def handle_time_settings(self, key):
-        if self.running:
-            print("请先停止当前操作再设置时间参数。")
-            return
-
-        if key == Key.f6:
-            # 设置按键按下时间
-            try:
-                new_press_time = int(input("输入新的按键按下时间（毫秒,默认30ms): "))
-                self.config_manager.update_config('press_time', new_press_time)
-                print(f"按键按下时间设置为：{new_press_time}毫秒")
-            except ValueError:
-                print("无效输入，请输入一个整数值")
-        elif key == Key.f7:
-            # 设置按键间隔时间
-            try:
-                new_interval_time = int(input("输入新的按键间隔时间（毫秒,默认50ms): "))
-                self.config_manager.update_config('interval_time', new_interval_time)
-                print(f"按键间隔时间设置为：{new_interval_time}毫秒")
-            except ValueError:
-                print("无效输入，请输入一个整数值")
-
-                
+            
     def perform_actions(self):
         if self.mode == 1:
             self.initial_position = self.mouse.position
