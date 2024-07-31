@@ -7,3 +7,7 @@ build/
 
 # 如果使用了 --onefile 选项，可能还会生成一些临时文件夹
 *_cache/
+
+# 忽略icon和配置
+*.ico
+*.ini
