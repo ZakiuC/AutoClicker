@@ -119,21 +119,40 @@ class AutoClicker:
     def perform_actions(self):
         if self.mode == 1:
             self.initial_position = self.mouse.position
+
+        # 初始化按键迭代器
+        keys = ['w', 's', 'a', 'd']
+        key_iterator = iter(keys)
+
         while self.running:
             if self.mode == 1 and self.mouse.position != self.initial_position:
                 self.running = False
                 print("停止")
                 break
-            self.mouse.click(Button.left, 1)
-            keys = ['w', 'a', 's', 'd']
-            for key in keys:
-                self.keyboard.press(key)
-                time.sleep(self.config_manager.settings['press_time'] / 1000)
-                self.keyboard.release(key)
-                time.sleep(self.config_manager.settings['interval_time'] / 1000)
+
+            # self.mouse.click(Button.left, 1)  # 每次循环点击一次鼠标左键
+            self.keyboard.press(" ")
+            time.sleep(self.config_manager.settings['press_time'] / 1000)
+            self.keyboard.release(" ")
+
+            # 从迭代器获取按键，如果已经到达列表末尾，重置迭代器
+            try:
+                key = next(key_iterator)
+            except StopIteration:
+                key_iterator = iter(keys)
+                key = next(key_iterator)
+
+            self.keyboard.press(key)
+            time.sleep(self.config_manager.settings['press_time'] / 1000)
+            self.keyboard.release(key)
+            time.sleep(self.config_manager.settings['interval_time'] / 1000)
+
             if self.mode == 2:
                 self.mouse.position = (self.config_manager.settings['x'], self.config_manager.settings['y'])
+
         self.thread_active = False  # 线程完成后，将标志设置为 False
+
+
         
     def toggle(self):
         if not self.running:
